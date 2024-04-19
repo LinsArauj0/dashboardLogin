@@ -23,19 +23,19 @@
 
             <!-- <Option class="col-12 col-lg-3" :options="estadoCivilOptions" label="Estado Civil"
               v-model="usuario.estado_civil" :is-required="true" /> -->
-            <div class="col-12 col-lg-2 mt-2">
+          <div class="col-12 col-lg-2 mt-2">
             <div class="form-group">
-              <label for="estadoCivilOptions">Estado Civil</label>
+              <label for="usuario">Estado Civil</label>
               <select class="form-control" id="estadoCivilOptions" v-model="usuario.estado_civil"
                 :required="isRequired">
-                <option v-for="(estadoCivilOptions, index) in estadoCivilOptions" :key="index" :value="estadoCivilOptions">{{ estadoCivilOptions }}
+                <option v-for="(estadoCivilOptions, index) in estadoCivilOptions" :key="index" :value="estadoCivilOptions.value">{{ estadoCivilOptions.label }}
                 </option>
               </select>
             </div>
           </div>
             
             <InputForm class="col-12 col-lg-3" :label="'Data de Nascimento'" type="date" :is-required="true"
-              v-model="usuario.data_nascimento" />
+              v-model="usuario.data_nascimento" :formatter="format"/>
             <InputForm class="col-12 col-lg-3" :label="'Apelido'" type="text" v-model="usuario.apelido" />
           </div>
         </div>
@@ -49,16 +49,16 @@
             <div class="col-12 col-lg-4">
             <div class="form-group">
               <label for="usuario">Perfil</label>
-              <select class="form-control" id="usuario" v-model="usuario.perfil"
+              <select class="form-control" id="perfil" v-model="usuario.perfil"
                 :required="isRequired">
-                <option v-for="(usuario, index) in usuario" :key="index" :value="perfil">{{ perfil }}
+                <option v-for="(perfilOptions, index) in perfilOptions" :key="index" :value="perfilOptions.value">{{ perfilOptions.label }}
                 </option>
               </select>
             </div>
           </div>
 
           <InputForm class="col-12 col-lg-4" :label="'Função'" type="text" v-model="usuario.funcao" />
-          <InputForm class="col-12 col-lg-4" :label="'Naturalidade'" type="data" v-model="usuario.naturalidade" />
+          <InputForm class="col-12 col-lg-4" :label="'Naturalidade'" type="text" v-model="usuario.naturalidade" />
           <InputForm class="col-12 col-lg-6 mt-2" :label="'Chave Pix'" type="text" v-model="usuario.pix_key" />
         </div>
         <div class="info mt-4">
@@ -94,9 +94,9 @@
           <div class="col-12 col-lg-2 mt-2">
             <div class="form-group">
               <label for="estado">UF identidade</label>
-              <select class="form-control" id="cidade" v-model="usuario.endereco_residencial.estado"
+              <select class="form-control" id="cidade-ident" v-model="usuario.uf_identidade"
                 :required="isRequired">
-                <option v-for="(uf, index) in estado" :key="index" :value="uf">{{ uf }}
+                <option v-for="(uf, index) in estado" :key="index" :value="uf.value">{{ uf.label }}
                 </option>
               </select>
             </div>
@@ -112,16 +112,16 @@
             v-model="usuario.numero_carteira_trabalho" />
           <InputForm class="col-12 col-lg-3 mt-2" :label="'Série carteira'" type="text"
             v-model="usuario.serie_carteira_trabalho" />
-          <InputForm class="col-12 col-lg-3 mt-2" :label="'Data de emissão'" type="data"
+          <InputForm class="col-12 col-lg-3 mt-2" :label="'Data de emissão'" type="date"
             v-model="usuario.data_emissao_carteira_trabalho" />
           <!-- <InputForm class="col-12 col-lg-3 mt-2" :label="'UF da carteira'" type="text"
             v-model="usuario.uf_carteira_trabalho" /> -->
-            <div class="col-12 col-lg-3 mt-2">
+          <div class="col-12 col-lg-3 mt-2">
             <div class="form-group">
               <label for="estado">UF da carteira</label>
-              <select class="form-control" id="cidade" v-model="usuario.endereco_residencial.estado"
+              <select class="form-control" id="cidade-carteira" v-model="usuario.uf_carteira_trabalho"
                 :required="isRequired">
-                <option v-for="(uf, index) in estado" :key="index" :value="uf">{{ uf }}
+                <option v-for="(uf, index) in estado" :key="index" :value="uf.value">{{ uf.label }}
                 </option>
               </select>
             </div>
@@ -150,7 +150,7 @@
               <label for="estado">UF</label>
               <select class="form-control" id="cidade" v-model="usuario.endereco_residencial.estado"
                 :required="isRequired">
-                <option v-for="(uf, index) in estado" :key="index" :value="uf">{{ uf }}
+                <option v-for="(uf, index) in estado" :key="index" :value="uf.value">{{ uf.label }}
                 </option>
               </select>
             </div>
@@ -195,8 +195,8 @@
         </div>
       </div>
       <div class="d-flex justify-content-end p-4">
-        <button class="btn btn-secondary mx-2" @click="cancel" autofocus>Cancelar</button>
-        <button class="btn btn-primary" @click="saveUser" type="submit" autofocus>Salvar</button>
+        <button class="btn btn-secondary mx-2" @click="cancel" type="reset" autofocus>Cancelar</button>
+        <button class="btn btn-primary" type="submit" autofocus>Salvar</button>
       </div>
     </form>
   </div>
@@ -204,6 +204,7 @@
 
 <script>
 import InputForm from "@/components/input/input.vue";
+import moment from "moment";
 
 import UsuarioService from "@/service/resource/UsuarioService";
 import CidadeService from "@/service/resource/cidadeService";
@@ -261,25 +262,61 @@ export default {
           sabado_fim: ""
         }
       },
-
       estadoCivilOptions: [
-
+        { label: "Solteiro(a)", value: 1 },
+        { label: "Casado(a)", value: 2 },
+        { label: "Divorciado(a)", value: 3 },
+        { label: "Viuvo(a)", value: 4 },
+        { label: "Separo(a)", value: 5 },
       ],
       perfilOptions: [
-        { label: "Admin", value: "admin" },
-        { label: "Financeiro", value: "financeiro" },
-        { label: "Gerente", value: "gerente" },
-        { label: "Suporte", value: "suporte" },
-        { label: "Marketing", value: "marketing" },
-
+        { label: "Admin", value: 1 },
+        { label: "Financeiro", value: 2 },
+        { label: "Gerente", value: 3 },
+        { label: "Suporte", value: 4 },
+        { label: "Marketing", value: 5 },
       ],
-      estado: ["PI", "MA", "CE"],
+      estado: [
+        {label: "AC", value: 12 },
+        {label: "AL", value: 27 },
+        {label: "AP", value: 16 },
+        {label: "AM", value: 13 },
+        {label: "BA", value: 29 },
+        {label: "CE", value: 23 },
+        {label: "DF", value: 53 },
+        {label: "ES", value: 32 },
+        {label: "GO", value: 52 },
+        {label: "MA", value: 21 },
+        {label: "MT", value: 51 },
+        {label: "MS", value: 50 },
+        {label: "MG", value: 31 },
+        {label: "PA", value: 15 },
+        {label: "PB", value: 25 },
+        {label: "PR", value: 41 },
+        {label: "PE", value: 26 },
+        {label: "PI", value: 22 },
+        {label: "RJ", value: 33 },
+        {label: "RN", value: 24 },
+        {label: "RS", value: 43 },
+        {label: "RO", value: 11 },
+        {label: "RR", value: 14 },
+        {label: "SC", value: 42 },
+        {label: "SP", value: 35 },
+        {label: "SE", value: 28 },
+        {label: "TO", value: 17 }
+      ],
       cidade: [],
       bairro: [],
     };
   },
   methods: {
     async saveUser() {
+      this.usuario.data_nascimento = moment(String(this.usuario.data_nascimento)).format('DD/MM/YYYY');
+      this.usuario.data_emissao_carteira_trabalho = moment(String(this.usuario.data_emissao_carteira_trabalho)).format('DD/MM/YYYY');
+
+      this.usuario.horario_colaborador.dia_util_fim_tarde = this.usuario.horario_colaborador.dia_util_inicio_manha;
+      this.usuario.horario_colaborador.dia_util_inicio_tarde = this.usuario.horario_colaborador.dia_util_inicio_manha;
+
       console.log(this.usuario)
       if (this.validateForm()) {
         try {
@@ -290,8 +327,8 @@ export default {
           console.error('Erro ao salvar usuário:', error);
         }
       }
-
     },
+    
     validateForm() {
       if (!this.usuario.nome || !this.usuario.cpf_cnpj) {
         alert('Preencha todos os campos obrigatórios!');
@@ -300,7 +337,6 @@ export default {
         return true;
       }
     },
-
     cancel() {
       this.clearForm();
     },
