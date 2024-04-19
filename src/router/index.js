@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import LoginScreen from '../views/Login/LoginColaborador.vue'
 import Utilitarios from '@/views/Utiliario/Utilitarios.vue'
 import Usuarios from '@/views/Usuarios/Usuarios.vue'
-import ListaUser from '@/views/ListUsuario/ListaUser.vue'
+import Error from '@/views/PageError/Error.vue'
 import authGuard from '@/auth/authGuard'
 
 const routes = [
@@ -10,6 +10,11 @@ const routes = [
     path: '/',
     name: 'Login',
     component: LoginScreen
+  },
+  {
+    path:'/error-404',
+    component: Error,
+    beforeEnter: authGuard
   },
   {
     path:'/utilitarios',
@@ -24,11 +29,9 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: "/lista",
-    name: "ListEndereco",
-    component: ListaUser,
-    beforeEnter: authGuard
-  }
+    path:'/:catchAll(.*)',
+    redirect: '/error-404'
+  },
 ]
 
 const router = createRouter({

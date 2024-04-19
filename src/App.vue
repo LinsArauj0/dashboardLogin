@@ -4,8 +4,6 @@
     <NavBar v-if="!isLoginRouter()"/>
     <Sidebar v-if="!isLoginRouter()"/>
     <RouterView />
-  
-
   </div>
 </template>
 

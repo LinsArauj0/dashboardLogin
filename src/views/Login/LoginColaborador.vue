@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import router from "@/router";
 import LoginService from "@/service/resource/loginService";
 
 export default {
@@ -81,6 +82,16 @@ export default {
         this.errorMessage =
           "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.";
       }
+      router.beforeEach((to, from, next) => {
+        const requiredAuth = to.matched.some(record => record.meta.requiresAuth);
+        const isAuthenticated = !!localStorage.getItem("Token");
+  
+        if(requiredAuth && !isAuthenticated) {
+          next('./login');
+        } else{
+          next();
+        }
+      })
     },
   },
 };
