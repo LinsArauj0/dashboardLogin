@@ -14,18 +14,17 @@
   }
   
   .custom-right-column {
-    margin-top: 80px;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-direction: column;
   }
   
   .custom-form-content {
+    margin: auto;
     width: 375px;
-    height: 340px;
-    flex: 1;
+    height: 340px !important;
   }
   
   .custom-form-content h2 {
@@ -37,6 +36,8 @@
   
   .custom-bottom-column {
     width: 100%;
+    height: 147px;
+    display: flex;
   }
   
   .custom-bottom-column > img {
@@ -139,5 +140,35 @@
   @keyframes l23 {
     100% {
       transform: rotate(1turn);
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .custom-left-column {
+      display: none;
+    }
+    .custom-right-column {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+    }
+    .custom-form-content {
+      width: 90% !important;
+      align-items: center;
+    }
+    .custom-btn-login {
+      font-size: 14px;
+      width: 100px;
+    }
+    .custom-submit a {
+      font-size: 14px;
+    }
+    #password, #email {
+      width: 100%;
+    }
+    .custom-bottom-column{
+      display: none;
     }
   }

@@ -338,8 +338,10 @@ export default {
       }
     },
     cancel() {
+      this.$emit(this.cancel, false)
       this.clearForm();
     },
+
     clearForm() {
       this.usuario = {
         endereco_residencial: {
@@ -415,7 +417,6 @@ export default {
   },
   watch: {
     'usuario.endereco_residencial.cidade'(newValue, oldValue) {
-      console.log(newValue, oldValue)
       if (newValue !== oldValue) {
         this.obterBairros(newValue);
       }

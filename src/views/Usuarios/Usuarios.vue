@@ -1,6 +1,6 @@
 <template>
   <div id="main-user">
-    <div >
+    <div>
       <ListEndereco />
     </div>
     <DialogBox v-model:visible="visible" modal class="col-11 col-md-11 col-lg-7" :draggable="false">
@@ -38,6 +38,19 @@ export default {
     ListEndereco,
     UsuarioCadastro,
   },
+  data() {
+    return {
+      cancelDialog: false
+    }
+  },
+  methods: {
+    cancelarDialog(valor) {
+      this.visible = valor;
+    }
+  },
+  watch:{
+
+  }
 }
 </script>
 <style>

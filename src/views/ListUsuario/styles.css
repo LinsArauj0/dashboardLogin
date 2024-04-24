@@ -127,12 +127,13 @@ li{
     gap: 34px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .subtitle {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 120px;
+    width: 290px;
     height: 38px;
     top: 5px;
     left: -0.07px;
@@ -140,7 +141,7 @@ li{
 }
 
 .nome {
-    width: 120px;
+    width: 100%;
     height: 20px;
     top: 5px;
     left: -0.07px;
@@ -149,7 +150,7 @@ li{
     color: #302F2F;
 }
 .setor {
-    width: 70px;
+    width: 100%;
     height: 18px;
     top: 25px;
     left: -0.7px;
@@ -171,7 +172,7 @@ li{
     
 }
 .status {
-    width: 36px;
+    width: 100%;
     height: 18px;
     background: #AEF5E4;
     color: #038868;
@@ -196,7 +197,7 @@ li{
 }
 
 .cpf p {
-    width: 136px;
+    width: 100%;
     height: 18px;
     font-weight: 700;
     font-size: 14px;
@@ -239,7 +240,7 @@ li{
 }
 
 .endereco-completo {
-    width: 289px;
+    width: 100%;
     height: 36px;
     display: flex;
     font-weight: 700;
